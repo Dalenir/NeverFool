@@ -1,13 +1,20 @@
-FROM python:3.11
+FROM python:3.11 as core
 
 ENV PYTHONUNBUFFERED=1
 
 LABEL version = '0.1'
-LABEL master = 'Neveric'
 
-RUN mkdir /LittleAPI
+ARG OWNER_NAME
+LABEL master = "${OWNER_NAME}"
+
 WORKDIR /LittleAPI
 COPY ./requirements.txt /tmp/
+
+RUN pip3 install --upgrade pip
+RUN pip3 install -r /tmp/requirements.txt
+
+
+FROM core as test_extended
 
 RUN apt-get update
 RUN apt-get -y install software-properties-common
@@ -19,5 +26,5 @@ RUN ln -s /opt/allure-2.20.1/bin/allure /usr/bin/allure
 
 RUN apt-get autoclean -y & apt-get autoremove -y
 
-RUN pip3 install --upgrade pip
-RUN pip3 install -r /tmp/requirements.txt
+COPY ./tests/test_reqs.txt /tmp/
+RUN pip3 install -r /tmp/test_reqs.txt

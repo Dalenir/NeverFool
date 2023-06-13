@@ -14,7 +14,7 @@ A barebones repo that can make it easier to develop and deploy a full-stack app 
 ## Easy start:
 1) Update all node packages:
     ```sh
-    pushd web && bash enviroment_update.sh && popd 
+    pushd web && & echo y > npx npm-check-updates -u && npm i && popd 
     ```
 2) Copy .env file from example:
    ```sh
@@ -30,8 +30,14 @@ A barebones repo that can make it easier to develop and deploy a full-stack app 
    ```sh
    docker compose -f Deploy/dev_compose.yml up
    ```
+   
+5) When you are ready to ship, update and save all packages:
+   ```sh
+   pushd web && & echo y > npx npm-check-updates -u && npm i --save && popd 
+   ```
 
-5) When you ready to ship, build and start it for production:
+
+6) Start it for production:
    ```sh
    docker compose -f Deploy/main_compose.yml build && docker compose -f Deploy/main_compose.yml up
    ```
